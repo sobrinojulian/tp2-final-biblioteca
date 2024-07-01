@@ -1,16 +1,30 @@
 import express from 'express'
-import config from './config.js'
 import Router from './router/libros.js'
 
-const PORT = config.PORT
+class Server {
+  constructor(port) {
+    this.port = port
+    this.app = express()
+    this.app.use(express.json())
+    this.app.use(express.urlencoded({ extended: true }))
+    this.app.use('/api/libros', new Router().config())
+  }
 
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+  async start() {
+    this.server = this.app.listen(this.port, () => {
+      console.log(`Server listening on http://localhost:${this.port}`)
+    })
 
-app.use('/api/libros', new Router().config())
+    this.server.on('error', error => {
+      console.log(`Error en servidor: ${error.message}`)
+    })
 
-const server = app.listen(PORT, () =>
-  console.log(`Server listening on http://localhost:${PORT}`)
-)
-server.on('error', error => console.log(`Error en servidor: ${error.message}`))
+    return this.app
+  }
+
+  async stop() {
+    this.server.close()
+  }
+}
+
+export default Server
