@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import ModelFactory from '../model/DAO/libros/librosFactory.js'
 import config from '../config.js'
-import validar from './validaciones/libro.js'
+import validar from '../validaciones/libro.js'
 import ErrorDeValidacion from '../errores/ErrorDeValidacion.js'
 
 class Servicio {
